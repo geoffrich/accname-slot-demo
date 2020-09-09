@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slot accessible name demo</title>
+  </head>
+  <body>
+    <h1>Determining the accessible name of slots</h1>
+    <h2>Slot without default content</h2>
+    <pre class="template"></pre>
+
+    <custom-button>Custom name</custom-button>
+    <p>The button has computed name: <span id="first"></span> (should be Custom name)</p>
+
+    <h2>Slot with default content</h2>    
+    <pre class="template-with-default"></pre>
+    <custom-button-with-default>Custom name</custom-button-with-default>
+    <custom-button-with-default></custom-button-with-default>
+    <p>
+      The first button has computed name: <span id="first-with-default"></span> (should be Custom
+      name)
+    </p>
+    <p>
+      The second button has computed name:
+      <span id="second-with-default"></span> (should be Default name)
+    </p>
+    <template id="button-template">
+      <button><slot></slot></button>
+    </template>
+    <template id="button-template-with-default">
+      <button><slot>Default name</slot></button>
+    </template>
+    <script>
+      customElements.define(
+        'custom-button',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            const template = document.getElementById('button-template').content;
+            const shadowRoot = this.attachShadow({ mode: 'open' }).appendChild(
+              template.cloneNode(true)
+            );
+          }
+        }
+      );
+
+      customElements.define(
+        'custom-button-with-default',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            const template = document.getElementById('button-template-with-default').content;
+            const shadowRoot = this.attachShadow({ mode: 'open' }).appendChild(
+              template.cloneNode(true)
+            );
+          }
+        }
+      );
+    </script>
+    
+    <script>
+    </script>
+    <script src="bundle.js"></script>
+  </body>
+</html>
